@@ -7,9 +7,9 @@ import (
 
 func Run(ctx *context.Context) error {
 
-	channels.ListenTrades(ctx)
+	channels.ListenTrade(ctx)
 
-	channels.ListenKlines(ctx)
+	channels.ListenKline(ctx)
 
 	channels.ListenDepth(ctx)
 
