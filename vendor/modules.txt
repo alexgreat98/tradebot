@@ -1,3 +1,5 @@
+# github.com/BurntSushi/toml v0.3.1
+github.com/BurntSushi/toml
 # github.com/adshao/go-binance v0.0.0-20200927114546-097cf4adefa9
 ## explicit
 github.com/adshao/go-binance
@@ -20,6 +22,9 @@ github.com/gofiber/fiber/v2/utils
 # github.com/gorilla/websocket v1.4.2
 ## explicit
 github.com/gorilla/websocket
+# github.com/jinzhu/configor v1.2.0
+## explicit
+github.com/jinzhu/configor
 # github.com/klauspost/compress v1.10.7
 github.com/klauspost/compress/flate
 github.com/klauspost/compress/gzip
@@ -37,3 +42,5 @@ github.com/valyala/tcplisten
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
+# gopkg.in/yaml.v2 v2.2.2
+gopkg.in/yaml.v2

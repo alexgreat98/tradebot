@@ -1,11 +1,12 @@
 package server
 
 import (
+	"context"
 	"github.com/gofiber/fiber/v2"
 	"github.com/webdelo/tradebot/server/routes"
 )
 
-func Run() error {
+func Run(ctx *context.Context) error {
 	app := fiber.New()
 
 	// define routes
