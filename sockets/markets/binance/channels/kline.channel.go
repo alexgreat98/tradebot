@@ -7,29 +7,26 @@ import (
 	"github.com/webdelo/tradebot/interfaces"
 )
 
-func ListenKline(ctx *context.Context) error {
-	fmt.Println("Listen Klines channel")
-
-	var klineListener KlineListener
-
-	//TODO: subscribe observers
-
-	//TODO: create binance constants for symbols and intervals
-	klineListener.Listen(ctx, "LTCBTC", "1m")
-
-	return nil
-
+// NewKlineChannel is constructor instances new channel
+func NewKlineChannel() *KlineChannel {
+	return new(KlineChannel)
 }
 
-// KlineListener get info from sockets and notify observers
-type KlineListener struct {
+// KlineChannel get info from sockets and notify observers
+type KlineChannel struct {
 	subscribers []interfaces.Observer
 }
 
-func (kl *KlineListener) Listen(ctx *context.Context, symbol string, interval string) (doneC, stopC chan struct{}, err error) {
+// Listen method starts the socket listening
+func (kl *KlineChannel) Listen(ctx *context.Context, symbol string, interval string) (doneC, stopC chan struct{}, err error) {
 	wsKlineHandler := func(event *binance.WsKlineEvent) {
-		//TODO: notify observers
-		fmt.Println(event)
+		for _, observer := range kl.subscribers {
+			err := observer.HandleEvent("KlineIssued", event)
+			if err != nil {
+				// TODO: log error
+				return
+			}
+		}
 	}
 
 	errHandler := func(err error) {
@@ -47,11 +44,11 @@ func (kl *KlineListener) Listen(ctx *context.Context, symbol string, interval st
 
 }
 
-func (kl *KlineListener) Subscribe(subscriber interfaces.Observer) {
+func (kl *KlineChannel) Subscribe(subscriber interfaces.Observer) {
 	kl.subscribers = append(kl.subscribers, subscriber)
 }
 
-func (kl *KlineListener) Unsubscribe(subscriber interfaces.Observer) {
+func (kl *KlineChannel) Unsubscribe(subscriber interfaces.Observer) {
 	kl.subscribers = removeFromSlice(kl.subscribers, subscriber)
 }
 
