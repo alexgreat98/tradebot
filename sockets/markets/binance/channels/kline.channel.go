@@ -21,6 +21,7 @@ type KlineChannel struct {
 func (kl *KlineChannel) Listen(ctx *context.Context, symbol string, interval string) (doneC, stopC chan struct{}, err error) {
 	wsKlineHandler := func(event *binance.WsKlineEvent) {
 		for _, observer := range kl.subscribers {
+			// TODO: use named type for event detection
 			go observer.HandleEvent("KlineIssued", event)
 		}
 	}

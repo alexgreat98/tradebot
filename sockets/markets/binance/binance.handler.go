@@ -22,9 +22,11 @@ func Run(ctx *context.Context) error {
 func listenKlineChannel(ctx *context.Context) error {
 	klineChannel := channels.NewKlineChannel()
 
+	// Attach observers for that channel
 	observer := klineobserver.NewKlineToDB()
 	klineChannel.Subscribe(observer)
 
+	// Start channel listening
 	_, _, err := klineChannel.Listen(
 		ctx,
 		Symbols()["BTCUSDT"],

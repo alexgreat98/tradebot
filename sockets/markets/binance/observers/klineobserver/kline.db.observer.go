@@ -2,6 +2,11 @@ package klineobserver
 
 import (
 	"fmt"
+	"github.com/adshao/go-binance"
+	"github.com/golobby/container"
+	"github.com/jinzhu/copier"
+	interfaces "github.com/webdelo/tradebot/interfaces/repositories/binance"
+	binanceModels "github.com/webdelo/tradebot/models/markets/binance"
 	"strconv"
 )
 
@@ -21,18 +26,35 @@ func NewKlineToDB() *klineToDB {
 }
 
 func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
+	// TODO: use named type for event detection
 	if event == "KlineIssued" {
-		err := obj.StoreKline(data)
-		if err != nil {
-			return err
+		binanceKlineEvent, ok := data.(*binance.WsKlineEvent)
+		if ok {
+			err := obj.StoreKline(binanceKlineEvent.Kline)
+			if err != nil {
+				return err
+			}
+		} else {
+			//TODO: log alert!
 		}
 	}
 	return nil
 }
 
 // StoreKline method store in DB new Kline
-func (obj *klineToDB) StoreKline(kline interface{}) error {
-	fmt.Println("Tring to store Kline!", kline)
+func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
+	var klineModel binanceModels.Kline
+	err := copier.Copy(&klineModel, &kline)
+	if err != nil {
+		return err
+	}
+
+	var BinanceKlineRepo interfaces.BinanceKlineRepository
+	container.Make(&BinanceKlineRepo)
+
+	BinanceKlineRepo.Create(&klineModel)
+
+	fmt.Println("Stored successfully!")
 	return nil
 }
 
