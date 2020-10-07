@@ -6,18 +6,27 @@ import (
 	"gorm.io/gorm"
 )
 
-var (
-	Sqlite *gorm.DB = new(gorm.DB)
-)
-
-func init() {
-	Sqlite, err := gorm.Open(sqliteGorm.Open("bot.sqlite.db"), &gorm.Config{})
+// Sqlite instance new DB object with sqlite driver
+func Sqlite() (*gorm.DB, error) {
+	sqlite, err := gorm.Open(sqliteGorm.Open("bot.sqlite.db"), &gorm.Config{})
 	if err != nil {
-		panic("Db opening failed! " + err.Error())
+		return nil, err
 	}
 
-	err = Sqlite.AutoMigrate(&binanceModels.Kline{})
-	if err != nil {
-		panic("Db migrating failed! " + err.Error())
+	// start sockets listening
+	if err := autoMigrate(sqlite); err != nil {
+		return nil, err
 	}
+
+	return sqlite, nil
+}
+
+// autoMigrate create tables for needed models
+func autoMigrate(db *gorm.DB) error {
+	err := db.AutoMigrate(&binanceModels.Kline{})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

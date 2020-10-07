@@ -1,13 +1,15 @@
 package repositories
 
 import (
+	"context"
 	binanceModels "github.com/webdelo/tradebot/models/markets/binance"
 	"gorm.io/gorm"
 )
 
-func NewGormBinanceKlineRepo(dbDriver *gorm.DB) *GormBinanceKlineRepo {
-	repo := new(GormBinanceKlineRepo)
-	repo.db = dbDriver
+func NewGormBinanceKlineRepo(ctx *context.Context, dbDriver *gorm.DB) *GormBinanceKlineRepo {
+	repo := &GormBinanceKlineRepo{
+		db: dbDriver,
+	}
 	return repo
 }
 

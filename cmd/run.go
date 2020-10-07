@@ -11,8 +11,10 @@ import (
 func Run() error {
 	ctx := context.Background()
 
-	// Bind all dependencies
-	providers.Bind(ctx)
+	// Boot all dependencies
+	if err := providers.Boot(&ctx); err != nil {
+		return err
+	}
 
 	// start sockets listening
 	if err := sockets.Run(&ctx); err != nil {
