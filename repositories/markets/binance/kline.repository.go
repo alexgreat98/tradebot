@@ -7,10 +7,9 @@ import (
 )
 
 func NewGormBinanceKlineRepo(ctx *context.Context, dbDriver *gorm.DB) *GormBinanceKlineRepo {
-	repo := &GormBinanceKlineRepo{
+	return &GormBinanceKlineRepo{
 		db: dbDriver,
 	}
-	return repo
 }
 
 type GormBinanceKlineRepo struct {
