@@ -2,11 +2,11 @@ package sockets
 
 import (
 	"context"
-	binanceSocket "github.com/webdelo/tradebot/sockets/markets/binance"
+	binanceSockets "github.com/webdelo/tradebot/sockets/markets/binance"
 )
 
 func Run(ctx *context.Context) error {
 	// Run Binance sockets listening
-	err := binanceSocket.Run(ctx)
+	err := binanceSockets.Run(ctx)
 	return err
 }

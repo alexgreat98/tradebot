@@ -2,13 +2,17 @@ package binance
 
 import (
 	"context"
+	"github.com/webdelo/tradebot/repositories/markets"
 	"github.com/webdelo/tradebot/sockets/markets/binance/channels"
-	"github.com/webdelo/tradebot/sockets/markets/binance/observers/klineobserver"
+	"github.com/webdelo/tradebot/sockets/markets/binance/observers/klineobservers"
 )
 
+// Run binance sockets listeners
 func Run(ctx *context.Context) error {
 
-	listenKlineChannel(ctx)
+	if err := listenKlineChannel(ctx); err != nil {
+		return err
+	}
 
 	//TODO: move listening starting to handler
 	//channels.ListenKline(ctx)
@@ -23,8 +27,14 @@ func listenKlineChannel(ctx *context.Context) error {
 	klineChannel := channels.NewKlineChannel()
 
 	// Attach observers for that channel
-	observer := klineobserver.NewKlineToDB()
-	klineChannel.Subscribe(observer)
+	klineChannel.Subscribe(
+		klineobservers.NewKlineToDB(),
+	)
+
+	klineStorage := markets.NewKlineStorage("1m", 5)
+	klineChannel.Subscribe(
+		klineobservers.NewKlineToStorage(klineStorage),
+	)
 
 	// Start channel listening
 	_, _, err := klineChannel.Listen(

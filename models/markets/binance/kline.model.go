@@ -23,43 +23,43 @@ type Kline struct {
 	ActiveBuyQuoteVolume string `json:"active_buy_quote_volume"`
 }
 
-func (k *Kline) getStartTime() int64 {
+func (k *Kline) GetStartTime() int64 {
 	return k.StartTime
 }
 
-func (k *Kline) getEndTime() int64 {
+func (k *Kline) GetEndTime() int64 {
 	return k.EndTime
 }
 
-func (k *Kline) getSymbol() string {
+func (k *Kline) GetSymbol() string {
 	return k.Symbol
 }
 
-func (k *Kline) getInterval() string {
+func (k *Kline) GetInterval() string {
 	return k.Interval
 }
 
-func (k *Kline) getOpen() string {
+func (k *Kline) GetOpen() string {
 	return k.Open
 }
 
-func (k *Kline) getClose() string {
+func (k *Kline) GetClose() string {
 	return k.Close
 }
 
-func (k *Kline) getHigh() string {
+func (k *Kline) GetHigh() string {
 	return k.High
 }
 
-func (k *Kline) getLow() string {
+func (k *Kline) GetLow() string {
 	return k.Low
 }
 
-func (k *Kline) getVolume() string {
+func (k *Kline) GetVolume() string {
 	return k.Volume
 }
 
-func (k *Kline) getTradeNum() int64 {
+func (k *Kline) GetTradeNum() int64 {
 	return k.TradeNum
 }
 

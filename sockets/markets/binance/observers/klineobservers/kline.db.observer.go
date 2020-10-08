@@ -1,4 +1,4 @@
-package klineobserver
+package klineobservers
 
 import (
 	"fmt"
@@ -14,13 +14,13 @@ type klineToDB struct {
 	key string
 }
 
-var currentKey int = 1
+var currentKlineToDBKey int = 1
 
 func NewKlineToDB() *klineToDB {
 	observer := new(klineToDB)
 	// set default key
-	observer.SetKey("kline.to.db.observer." + strconv.Itoa(currentKey))
-	currentKey++
+	observer.SetKey("kline.to.db.observer." + strconv.Itoa(currentKlineToDBKey))
+	currentKlineToDBKey++
 
 	return observer
 }
@@ -43,7 +43,8 @@ func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
 
 // StoreKline method store in DB new Kline
 func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
-	var klineModel binanceModels.Kline
+	var klineModel *binanceModels.Kline
+	klineModel = new(binanceModels.Kline)
 	err := copier.Copy(&klineModel, &kline)
 	if err != nil {
 		return err
@@ -52,9 +53,9 @@ func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
 	var BinanceKlineRepo interfaces.BinanceKlineRepository
 	container.Make(&BinanceKlineRepo)
 
-	BinanceKlineRepo.Create(&klineModel)
+	BinanceKlineRepo.Create(klineModel)
 
-	fmt.Println("Stored successfully!")
+	fmt.Println("Stored successfully! ", klineModel)
 	return nil
 }
 
