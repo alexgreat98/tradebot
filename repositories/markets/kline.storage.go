@@ -25,9 +25,12 @@ func NewKlineStorage(interval string, size int) *KlineStorage {
 
 // SetKline put new kline to the list and remove last kline
 func (s *KlineStorage) SetKline(kline interfaces.Kline) interfaces2.KlineStorage {
+	// Check if this first kline adding to storage
 	if s.currentKline != nil {
+		// If current kline is final move it to the last-list
 		if s.currentKline.IsCompleted() {
 			s.list.PushFront(s.currentKline)
+			// check if the list is full truncate the last kline
 			if s.list.Len() > s.size {
 				s.list.Remove(
 					s.list.Back(),

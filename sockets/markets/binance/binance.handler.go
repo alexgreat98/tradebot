@@ -26,11 +26,12 @@ func Run(ctx *context.Context) error {
 func listenKlineChannel(ctx *context.Context) error {
 	klineChannel := channels.NewKlineChannel()
 
-	// Attach observers for that channel
+	// Attach observers that store kline to DB
 	klineChannel.Subscribe(
 		klineobservers.NewKlineToDB(),
 	)
 
+	// Attach observer that put kline to fast storage
 	klineStorage := markets.NewKlineStorage("1m", 5)
 	klineChannel.Subscribe(
 		klineobservers.NewKlineToStorage(klineStorage),
