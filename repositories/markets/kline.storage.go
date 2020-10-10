@@ -3,8 +3,8 @@ package markets
 import (
 	"container/list"
 	"fmt"
+	baseinterfaces "github.com/webdelo/tradebot/interfaces"
 	interfaces "github.com/webdelo/tradebot/interfaces/market"
-	interfaces2 "github.com/webdelo/tradebot/interfaces/repositories"
 )
 
 type KlineStorage struct {
@@ -12,6 +12,7 @@ type KlineStorage struct {
 	size         int
 	currentKline interfaces.Kline
 	list         *list.List
+	subscribers  []baseinterfaces.Observer
 }
 
 // NewKlineStorage instance new
@@ -24,7 +25,7 @@ func NewKlineStorage(interval string, size int) *KlineStorage {
 }
 
 // SetKline put new kline to the list and remove last kline
-func (s *KlineStorage) SetKline(kline interfaces.Kline) interfaces2.KlineStorage {
+func (s *KlineStorage) SetKline(kline interfaces.Kline) interfaces.KlineStorage {
 	// Check if this first kline adding to storage
 	if s.currentKline != nil {
 		// If current kline is final move it to the last-list
@@ -39,7 +40,12 @@ func (s *KlineStorage) SetKline(kline interfaces.Kline) interfaces2.KlineStorage
 		}
 	}
 	s.currentKline = kline
-	// TODO: notify observers about kline update
+
+	// Notify observers about new kline
+	for _, subscriver := range s.subscribers {
+		// TODO: use named type for event title
+		subscriver.HandleEvent("KlineStorageUpdated", s)
+	}
 	return s
 }
 
@@ -100,4 +106,27 @@ func (s *KlineStorage) CountLastList() int {
 // IsStorageReady detect is last-list is full (if that is so important to work with full list for some analytics modules)
 func (s *KlineStorage) IsStorageReady() bool {
 	return s.GetStorageSize() == s.CountLastList()
+}
+
+// Observable interface implementation
+
+//Subscribe new observer and will notify about new events
+func (s *KlineStorage) Subscribe(subscriber baseinterfaces.Observer) {
+	s.subscribers = append(s.subscribers, subscriber)
+}
+
+//Unsubscribe observer and will not send new events
+func (s *KlineStorage) Unsubscribe(subscriber baseinterfaces.Observer) {
+	s.subscribers = removeFromSlice(s.subscribers, subscriber)
+}
+
+func removeFromSlice(subscribers []baseinterfaces.Observer, subscriber baseinterfaces.Observer) []baseinterfaces.Observer {
+	observerListLength := len(subscribers)
+	for i, observer := range subscribers {
+		if subscriber.ObserverKey() == observer.ObserverKey() {
+			subscribers[observerListLength-1], subscribers[i] = subscribers[i], subscribers[observerListLength-1]
+			return subscribers[:observerListLength-1]
+		}
+	}
+	return subscribers
 }

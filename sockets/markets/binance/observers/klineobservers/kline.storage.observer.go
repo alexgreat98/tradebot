@@ -1,22 +1,21 @@
 package klineobservers
 
 import (
-	"fmt"
 	"github.com/adshao/go-binance"
 	"github.com/jinzhu/copier"
-	interfaces2 "github.com/webdelo/tradebot/interfaces/repositories"
+	"github.com/webdelo/tradebot/interfaces/market"
 	binanceModels "github.com/webdelo/tradebot/models/markets/binance"
 	"strconv"
 )
 
 type klineToStorage struct {
 	key     string
-	storage interfaces2.KlineStorage
+	storage interfaces.KlineStorage
 }
 
 var currentKlineToStorageKey int = 1
 
-func NewKlineToStorage(storage interfaces2.KlineStorage) *klineToStorage {
+func NewKlineToStorage(storage interfaces.KlineStorage) *klineToStorage {
 	observer := new(klineToStorage)
 	observer.storage = storage
 
@@ -54,7 +53,6 @@ func (o *klineToStorage) ProcessKline(kline binance.WsKline) error {
 
 	o.storage.SetKline(klineModel)
 
-	fmt.Println("Kline added to KlineStorage!")
 	return nil
 }
 
