@@ -2,18 +2,17 @@ package interfaces
 
 import (
 	"container/list"
-	"github.com/webdelo/tradebot/interfaces/market"
 )
 
 type KlineStorage interface {
 	// SetKline append new kline to the list
-	SetKline(kline interfaces.Kline) KlineStorage
+	SetKline(kline Kline) KlineStorage
 
 	// GetInterval retrieve interval for stored kline-list
 	GetInterval() string
 
 	// GetCurrent retrieve the current (last) market kline (could be NOT finished!)
-	GetCurrent() interfaces.Kline
+	GetCurrent() Kline
 
 	// GetCurrentVolume retrieve volume for the current (last) kline
 	GetCurrentVolume() string

@@ -5,6 +5,7 @@ import (
 	"github.com/webdelo/tradebot/repositories/markets"
 	"github.com/webdelo/tradebot/sockets/markets/binance/channels"
 	"github.com/webdelo/tradebot/sockets/markets/binance/observers/klineobservers"
+	"github.com/webdelo/tradebot/strategy/pinbar"
 )
 
 // Run binance sockets listeners
@@ -31,8 +32,13 @@ func listenKlineChannel(ctx *context.Context) error {
 		klineobservers.NewKlineToDB(),
 	)
 
-	// Attach observer that put kline to fast storage
 	klineStorage := markets.NewKlineStorage("1m", 5)
+	// Attache Pinbar strategy for storage subscribers
+	klineStorage.Subscribe(
+		pinbar.NewPinbarObserver(),
+	)
+
+	// Attach observer that put kline to fast storage
 	klineChannel.Subscribe(
 		klineobservers.NewKlineToStorage(klineStorage),
 	)
