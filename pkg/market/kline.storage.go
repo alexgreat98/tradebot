@@ -1,18 +1,19 @@
-package markets
+package market
 
 import (
 	"container/list"
 	"fmt"
-	baseinterfaces "github.com/webdelo/tradebot/interfaces"
-	interfaces "github.com/webdelo/tradebot/interfaces/market"
+	"github.com/webdelo/tradebot/pkg/observer"
 )
 
 type KlineStorage struct {
+	observer.ObservableImpl
+
 	interval     string
 	size         int
-	currentKline interfaces.Kline
+	currentKline Kline
 	list         *list.List
-	subscribers  []baseinterfaces.Observer
+	subscribers  []observer.Observer
 }
 
 // NewKlineStorage instance new
@@ -25,7 +26,7 @@ func NewKlineStorage(interval string, size int) *KlineStorage {
 }
 
 // SetKline put new kline to the list and remove last kline
-func (s *KlineStorage) SetKline(kline interfaces.Kline) interfaces.KlineStorage {
+func (s *KlineStorage) SetKline(kline Kline) *KlineStorage {
 	// Check if this first kline adding to storage
 	if s.currentKline != nil {
 		// If current kline is final move it to the last-list
@@ -42,10 +43,8 @@ func (s *KlineStorage) SetKline(kline interfaces.Kline) interfaces.KlineStorage 
 	s.currentKline = kline
 
 	// Notify observers about new kline
-	for _, subscriver := range s.subscribers {
-		// TODO: use named type for event title
-		subscriver.HandleEvent("KlineStorageUpdated", s)
-	}
+	s.NotifySubscribers("KlineStorageUpdated", s)
+
 	return s
 }
 
@@ -55,7 +54,7 @@ func (s *KlineStorage) GetInterval() string {
 }
 
 // GetCurrent retrieve the current (last) market kline (could be NOT finished!)
-func (s *KlineStorage) GetCurrent() interfaces.Kline {
+func (s *KlineStorage) GetCurrent() Kline {
 	return s.currentKline
 }
 
@@ -87,7 +86,7 @@ func (s *KlineStorage) GetLastListVolume() string {
 func (s *KlineStorage) GetLastListTradeNum() int64 {
 	var sum int64 = 0
 	for e := s.list.Front(); e != nil; e = e.Next() {
-		k := e.Value.(interfaces.Kline)
+		k := e.Value.(Kline)
 		sum += k.GetTradeNum()
 	}
 	return sum
@@ -106,27 +105,4 @@ func (s *KlineStorage) CountLastList() int {
 // IsStorageReady detect is last-list is full (if that is so important to work with full list for some analytics modules)
 func (s *KlineStorage) IsStorageReady() bool {
 	return s.GetStorageSize() == s.CountLastList()
-}
-
-// Observable interface implementation
-
-//Subscribe new observer and will notify about new events
-func (s *KlineStorage) Subscribe(subscriber baseinterfaces.Observer) {
-	s.subscribers = append(s.subscribers, subscriber)
-}
-
-//Unsubscribe observer and will not send new events
-func (s *KlineStorage) Unsubscribe(subscriber baseinterfaces.Observer) {
-	s.subscribers = removeFromSlice(s.subscribers, subscriber)
-}
-
-func removeFromSlice(subscribers []baseinterfaces.Observer, subscriber baseinterfaces.Observer) []baseinterfaces.Observer {
-	observerListLength := len(subscribers)
-	for i, observer := range subscribers {
-		if subscriber.ObserverKey() == observer.ObserverKey() {
-			subscribers[observerListLength-1], subscribers[i] = subscribers[i], subscribers[observerListLength-1]
-			return subscribers[:observerListLength-1]
-		}
-	}
-	return subscribers
 }

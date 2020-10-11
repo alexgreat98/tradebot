@@ -1,15 +1,16 @@
-package binance
+package ws
 
 import (
 	"context"
-	"github.com/webdelo/tradebot/repositories/markets"
-	"github.com/webdelo/tradebot/sockets/markets/binance/channels"
-	"github.com/webdelo/tradebot/sockets/markets/binance/observers/klineobservers"
-	"github.com/webdelo/tradebot/strategy/pinbar"
+	"github.com/webdelo/tradebot/pkg/binance"
+	"github.com/webdelo/tradebot/pkg/binancews/channels"
+	"github.com/webdelo/tradebot/pkg/binancews/observers/klineobservers"
+	"github.com/webdelo/tradebot/pkg/market"
+	"github.com/webdelo/tradebot/pkg/strategy/pinbar"
 )
 
-// Run binance sockets listeners
-func Run(ctx *context.Context) error {
+// Run binancews ws listeners
+func BinanceRun(ctx *context.Context) error {
 
 	if err := listenKlineChannel(ctx); err != nil {
 		return err
@@ -32,7 +33,7 @@ func listenKlineChannel(ctx *context.Context) error {
 		klineobservers.NewKlineToDB(),
 	)
 
-	klineStorage := markets.NewKlineStorage("1m", 5)
+	klineStorage := market.NewKlineStorage("1m", 5)
 	// Attache Pinbar strategy for storage subscribers
 	klineStorage.Subscribe(
 		pinbar.NewPinbarObserver(),
@@ -46,8 +47,8 @@ func listenKlineChannel(ctx *context.Context) error {
 	// Start channel listening
 	_, _, err := klineChannel.Listen(
 		ctx,
-		Symbols()["BTCUSDT"],
-		KlineIntervals()["1m"],
+		binance.Symbols()["BTCUSDT"],
+		binance.KlineIntervals()["1m"],
 	)
 
 	if err != nil {

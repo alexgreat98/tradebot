@@ -1,4 +1,4 @@
-package interfaces
+package observer
 
 type Observable interface {
 	//Subscribe new observer and will notify about new events

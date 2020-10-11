@@ -5,7 +5,7 @@ import (
 	_ "github.com/adshao/go-binance"
 	"github.com/webdelo/tradebot/providers"
 	"github.com/webdelo/tradebot/server"
-	"github.com/webdelo/tradebot/sockets"
+	"github.com/webdelo/tradebot/ws"
 )
 
 func Run() error {
@@ -16,8 +16,8 @@ func Run() error {
 		return err
 	}
 
-	// start sockets listening
-	if err := sockets.Run(&ctx); err != nil {
+	// start web-sockets listening
+	if err := ws.Run(&ctx); err != nil {
 		return err
 	}
 

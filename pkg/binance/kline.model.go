@@ -1,4 +1,4 @@
-package binanceModels
+package binance
 
 import "gorm.io/gorm"
 

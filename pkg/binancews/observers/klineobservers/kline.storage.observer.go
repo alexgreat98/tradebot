@@ -3,19 +3,19 @@ package klineobservers
 import (
 	"github.com/adshao/go-binance"
 	"github.com/jinzhu/copier"
-	"github.com/webdelo/tradebot/interfaces/market"
-	binanceModels "github.com/webdelo/tradebot/models/markets/binance"
+	binance2 "github.com/webdelo/tradebot/pkg/binance"
+	"github.com/webdelo/tradebot/pkg/market"
 	"strconv"
 )
 
 type klineToStorage struct {
 	key     string
-	storage interfaces.KlineStorage
+	storage *market.KlineStorage
 }
 
 var currentKlineToStorageKey int = 1
 
-func NewKlineToStorage(storage interfaces.KlineStorage) *klineToStorage {
+func NewKlineToStorage(storage *market.KlineStorage) *klineToStorage {
 	observer := new(klineToStorage)
 	observer.storage = storage
 
@@ -44,8 +44,8 @@ func (o *klineToStorage) HandleEvent(event string, data interface{}) error {
 
 // ProcessKline method store in DB new Kline
 func (o *klineToStorage) ProcessKline(kline binance.WsKline) error {
-	var klineModel *binanceModels.Kline
-	klineModel = new(binanceModels.Kline)
+	var klineModel *binance2.Kline
+	klineModel = new(binance2.Kline)
 	err := copier.Copy(&klineModel, &kline)
 	if err != nil {
 		return err
