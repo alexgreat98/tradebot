@@ -1,10 +1,11 @@
 package web
 
 import (
+	interfaces "github.com/webdelo/tradebot/interfaces/market"
 	"net/http"
 )
 
-var Messages = make(chan string)
+var Messages = make(chan interfaces.Kline)
 
 // helloFromClient is a method that handles messages from the app client.
 func helloFromClient(c *Client, data interface{}) {

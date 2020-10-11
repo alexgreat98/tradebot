@@ -55,7 +55,7 @@ func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
 	container.Make(&BinanceKlineRepo)
 
 	BinanceKlineRepo.Create(klineModel)
-	go func() { web.Messages <- klineModel.Volume }()
+	go func() { web.Messages <- klineModel }()
 	fmt.Println("Stored successfully! ", klineModel)
 	return nil
 }
