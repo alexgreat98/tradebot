@@ -7,6 +7,7 @@ import (
 	"github.com/jinzhu/copier"
 	interfaces "github.com/webdelo/tradebot/interfaces/repositories/binance"
 	binanceModels "github.com/webdelo/tradebot/models/markets/binance"
+	web "github.com/webdelo/tradebot/sockets/web/binance"
 	"strconv"
 )
 
@@ -54,7 +55,7 @@ func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
 	container.Make(&BinanceKlineRepo)
 
 	BinanceKlineRepo.Create(klineModel)
-
+	go func() { web.Messages <- klineModel.Volume }()
 	fmt.Println("Stored successfully! ", klineModel)
 	return nil
 }
