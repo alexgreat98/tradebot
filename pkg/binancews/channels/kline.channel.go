@@ -34,7 +34,7 @@ func (kl *KlineChannel) Listen(
 		fmt.Println(err)
 	}
 
-	doneC, stopC, err = binance.WsKlineServe(symbol.Code(), interval.String(), wsKlineHandler, errHandler)
+	doneC, stopC, err = binance.WsKlineServe(symbol.Code, interval.Code, wsKlineHandler, errHandler)
 	if err != nil {
 		fmt.Println(err)
 		return nil, nil, err
