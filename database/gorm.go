@@ -13,7 +13,7 @@ func Sqlite() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// start ws listening
+	// start sockets listening
 	if err := autoMigrate(sqlite); err != nil {
 		return nil, err
 	}

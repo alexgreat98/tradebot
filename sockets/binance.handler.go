@@ -1,4 +1,4 @@
-package ws
+package sockets
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/webdelo/tradebot/pkg/strategy/pinbar"
 )
 
-// BinanceRun binancews ws listeners
+// BinanceRun binancews sockets listeners
 func BinanceRun(ctx *context.Context) error {
 
 	if err := listenKlineChannel(ctx); err != nil {

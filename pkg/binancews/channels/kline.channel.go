@@ -12,7 +12,7 @@ func NewKlineChannel() *KlineChannel {
 	return new(KlineChannel)
 }
 
-// KlineChannel get info from ws and notify observers
+// KlineChannel get info from sockets and notify observers
 type KlineChannel struct {
 	observer.ObservableImpl
 }
