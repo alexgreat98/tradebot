@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/adshao/go-binance"
+	"github.com/webdelo/tradebot/pkg/market"
 	"github.com/webdelo/tradebot/pkg/observer"
 )
 
@@ -18,7 +19,11 @@ type KlineChannel struct {
 }
 
 // Listen method starts the socket listening
-func (kl *KlineChannel) Listen(ctx *context.Context, symbol string, interval string) (doneC, stopC chan struct{}, err error) {
+func (kl *KlineChannel) Listen(
+	ctx *context.Context,
+	symbol market.Symbol,
+	interval market.Interval,
+) (doneC, stopC chan struct{}, err error) {
 	wsKlineHandler := func(event *binance.WsKlineEvent) {
 		// TODO: use named type for event detection
 		kl.NotifySubscribers("KlineIssued", event)
@@ -29,7 +34,7 @@ func (kl *KlineChannel) Listen(ctx *context.Context, symbol string, interval str
 		fmt.Println(err)
 	}
 
-	doneC, stopC, err = binance.WsKlineServe(symbol, interval, wsKlineHandler, errHandler)
+	doneC, stopC, err = binance.WsKlineServe(symbol.Code(), interval.String(), wsKlineHandler, errHandler)
 	if err != nil {
 		fmt.Println(err)
 		return nil, nil, err

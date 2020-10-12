@@ -33,7 +33,7 @@ func listenKlineChannel(ctx *context.Context) error {
 		klineobservers.NewKlineToDB(),
 	)
 
-	klineStorage := market.NewKlineStorage("1m", 5)
+	klineStorage := market.NewKlineStorage(binance.Intervals["1m"], 5)
 	// Attache Pinbar strategy for storage subscribers
 	klineStorage.Subscribe(
 		pinbar.NewPinbarObserver(),
@@ -47,8 +47,8 @@ func listenKlineChannel(ctx *context.Context) error {
 	// Start channel listening
 	_, _, err := klineChannel.Listen(
 		ctx,
-		binance.Symbols()["BTCUSDT"],
-		binance.KlineIntervals()["1m"],
+		binance.Symbols["btcusdt"],
+		binance.Intervals["1m"],
 	)
 
 	if err != nil {

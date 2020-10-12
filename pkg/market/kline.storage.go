@@ -9,7 +9,7 @@ import (
 type KlineStorage struct {
 	observer.ObservableImpl
 
-	interval     string
+	interval     Interval
 	size         int
 	currentKline Kline
 	list         *list.List
@@ -17,7 +17,7 @@ type KlineStorage struct {
 }
 
 // NewKlineStorage instance new
-func NewKlineStorage(interval string, size int) *KlineStorage {
+func NewKlineStorage(interval Interval, size int) *KlineStorage {
 	return &KlineStorage{
 		interval: interval,
 		size:     size,
@@ -49,7 +49,7 @@ func (s *KlineStorage) SetKline(kline Kline) *KlineStorage {
 }
 
 // GetInterval retrieve interval for stored kline-list
-func (s *KlineStorage) GetInterval() string {
+func (s *KlineStorage) GetInterval() Interval {
 	return s.interval
 }
 
