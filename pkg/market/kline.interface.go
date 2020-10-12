@@ -5,8 +5,8 @@ type Kline interface {
 	GetStartTime() int64
 	GetEndTime() int64
 
-	GetSymbol() string
-	GetInterval() string
+	GetSymbol() Symbol
+	GetInterval() Interval
 
 	GetOpen() string
 	GetClose() string
@@ -14,7 +14,7 @@ type Kline interface {
 	GetLow() string
 
 	GetVolume() string
-	GetTradeNum() int64
+	GetTradeNum() int
 
 	IsCompleted() bool
 	InProgress() bool

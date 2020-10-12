@@ -1,6 +1,9 @@
 package binance
 
-import "gorm.io/gorm"
+import (
+	"github.com/webdelo/tradebot/pkg/market"
+	"gorm.io/gorm"
+)
 
 type Kline struct {
 	gorm.Model
@@ -16,7 +19,7 @@ type Kline struct {
 	High                 string `json:"high"`
 	Low                  string `json:"low"`
 	Volume               string `json:"volume"`
-	TradeNum             int64  `json:"trade_numbers"`
+	TradeNum             int    `json:"trade_numbers"`
 	IsFinal              bool   `json:"is_final"`
 	QuoteVolume          string `json:"quote_volume"`
 	ActiveBuyVolume      string `json:"active_buy_volume"`
@@ -31,12 +34,12 @@ func (k *Kline) GetEndTime() int64 {
 	return k.EndTime
 }
 
-func (k *Kline) GetSymbol() string {
-	return k.Symbol
+func (k *Kline) GetSymbol() market.Symbol {
+	return Symbols[k.Symbol]
 }
 
-func (k *Kline) GetInterval() string {
-	return k.Interval
+func (k *Kline) GetInterval() market.Interval {
+	return Intervals[k.Interval]
 }
 
 func (k *Kline) GetOpen() string {
@@ -59,7 +62,7 @@ func (k *Kline) GetVolume() string {
 	return k.Volume
 }
 
-func (k *Kline) GetTradeNum() int64 {
+func (k *Kline) GetTradeNum() int {
 	return k.TradeNum
 }
 

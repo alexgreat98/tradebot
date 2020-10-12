@@ -9,19 +9,23 @@ import (
 	"strconv"
 )
 
-type klineToDB struct {
-	key string
-}
-
 var currentKlineToDBKey int = 1
 
 func NewKlineToDB() *klineToDB {
 	observer := new(klineToDB)
 	// set default key
-	observer.SetKey("kline.to.db.observer." + strconv.Itoa(currentKlineToDBKey))
+	observer.key = "kline.to.db.observer." + strconv.Itoa(currentKlineToDBKey)
 	currentKlineToDBKey++
 
 	return observer
+}
+
+type klineToDB struct {
+	key string
+}
+
+func (obj *klineToDB) ObserverKey() string {
+	return obj.key
 }
 
 func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
@@ -56,14 +60,4 @@ func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
 
 	fmt.Println("Stored successfully! ", klineModel)
 	return nil
-}
-
-func (obj *klineToDB) ObserverKey() string {
-	return obj.key
-}
-
-// SetKey set needed observer key
-func (obj *klineToDB) SetKey(key string) *klineToDB {
-	obj.key = key
-	return obj
 }

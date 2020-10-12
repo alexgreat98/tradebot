@@ -3,7 +3,7 @@ package klineobservers
 import (
 	"github.com/adshao/go-binance"
 	"github.com/jinzhu/copier"
-	binance2 "github.com/webdelo/tradebot/pkg/binance"
+	binanceLocal "github.com/webdelo/tradebot/pkg/binance"
 	"github.com/webdelo/tradebot/pkg/market"
 	"strconv"
 )
@@ -44,8 +44,8 @@ func (o *klineToStorage) HandleEvent(event string, data interface{}) error {
 
 // ProcessKline method store in DB new Kline
 func (o *klineToStorage) ProcessKline(kline binance.WsKline) error {
-	var klineModel *binance2.Kline
-	klineModel = new(binance2.Kline)
+	var klineModel *binanceLocal.Kline
+	klineModel = new(binanceLocal.Kline)
 	err := copier.Copy(&klineModel, &kline)
 	if err != nil {
 		return err

@@ -3,8 +3,8 @@ package sockets
 import (
 	"context"
 	"github.com/webdelo/tradebot/pkg/binance"
-	"github.com/webdelo/tradebot/pkg/binancews/channels"
-	"github.com/webdelo/tradebot/pkg/binancews/observers/klineobservers"
+	"github.com/webdelo/tradebot/pkg/binancews"
+	"github.com/webdelo/tradebot/pkg/binancewssubscribers/klineobservers"
 	"github.com/webdelo/tradebot/pkg/market"
 	"github.com/webdelo/tradebot/pkg/strategy/pinbar"
 )
@@ -26,9 +26,9 @@ func BinanceRun(ctx *context.Context) error {
 
 // listenKlineChannel starts listening for all needed Kline channels
 func listenKlineChannel(ctx *context.Context) error {
-	klineChannel := channels.NewKlineChannel()
+	klineChannel := binancews.NewKlineChannel()
 
-	// Attach observers that store kline to DB
+	// Attach binancewssubscribers that store kline to DB
 	klineChannel.Subscribe(
 		klineobservers.NewKlineToDB(),
 	)

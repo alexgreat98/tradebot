@@ -1,4 +1,4 @@
-package channels
+package binancews
 
 import (
 	"context"
@@ -13,7 +13,7 @@ func NewKlineChannel() *KlineChannel {
 	return new(KlineChannel)
 }
 
-// KlineChannel get info from sockets and notify observers
+// KlineChannel get info from sockets and notify binancewssubscribers
 type KlineChannel struct {
 	observer.ObservableImpl
 }

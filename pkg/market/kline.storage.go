@@ -42,7 +42,7 @@ func (s *KlineStorage) SetKline(kline Kline) *KlineStorage {
 	}
 	s.currentKline = kline
 
-	// Notify observers about new kline
+	// Notify binancewssubscribers about new kline
 	s.NotifySubscribers("KlineStorageUpdated", s)
 
 	return s
@@ -64,7 +64,7 @@ func (s *KlineStorage) GetCurrentVolume() string {
 }
 
 // GetCurrentTradeNum retrieve trades numbers for the current (last) kline
-func (s *KlineStorage) GetCurrentTradeNum() int64 {
+func (s *KlineStorage) GetCurrentTradeNum() int {
 	return s.currentKline.GetTradeNum()
 }
 
@@ -83,8 +83,8 @@ func (s *KlineStorage) GetLastListVolume() string {
 }
 
 // GetLastListTradeNum retrieve trades numbers summary for the last market kline-list
-func (s *KlineStorage) GetLastListTradeNum() int64 {
-	var sum int64 = 0
+func (s *KlineStorage) GetLastListTradeNum() int {
+	var sum int = 0
 	for e := s.list.Front(); e != nil; e = e.Next() {
 		k := e.Value.(Kline)
 		sum += k.GetTradeNum()

@@ -20,4 +20,9 @@ var (
 		"1w":  market.Interval{Code: "1w", Seconds: 604800},
 		"1M":  market.Interval{Code: "1M", Seconds: 2592000},
 	}
+
+	Symbols = map[string]market.Symbol{
+		"btcusdt": market.Symbol{Code: "BTCUSDT"},
+		"ethusdt": market.Symbol{Code: "ETHUSDT"},
+	}
 )
