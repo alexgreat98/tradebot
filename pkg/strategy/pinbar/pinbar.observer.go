@@ -2,7 +2,7 @@ package pinbar
 
 import (
 	"fmt"
-	"github.com/webdelo/tradebot/repositories/markets"
+	"github.com/webdelo/tradebot/pkg/market"
 )
 
 func NewPinbarObserver() *PinbarObserver {
@@ -16,8 +16,8 @@ type PinbarObserver struct {
 func (k PinbarObserver) HandleEvent(event string, data interface{}) error {
 	fmt.Println("--------- PINBAR --------")
 	fmt.Println(event)
-	var storage *markets.KlineStorage
-	storage = data.(*markets.KlineStorage)
+	var storage *market.KlineStorage
+	storage = data.(*market.KlineStorage)
 	fmt.Println(storage.GetCurrent())
 	fmt.Println("-------------------------")
 	return nil

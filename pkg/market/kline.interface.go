@@ -1,4 +1,4 @@
-package interfaces
+package market
 
 // Kline interface is the data contract for all kline entities
 type Kline interface {

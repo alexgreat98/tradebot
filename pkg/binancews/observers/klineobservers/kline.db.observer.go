@@ -5,6 +5,7 @@ import (
 	"github.com/adshao/go-binance"
 	"github.com/golobby/container"
 	"github.com/jinzhu/copier"
+	binance2 "github.com/webdelo/tradebot/pkg/binance"
 	interfaces "github.com/webdelo/tradebot/interfaces/repositories/binance"
 	binanceModels "github.com/webdelo/tradebot/models/markets/binance"
 	web "github.com/webdelo/tradebot/sockets/web/binance"
@@ -44,14 +45,14 @@ func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
 
 // StoreKline method store in DB new Kline
 func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
-	var klineModel *binanceModels.Kline
-	klineModel = new(binanceModels.Kline)
+	var klineModel *binance2.Kline
+	klineModel = new(binance2.Kline)
 	err := copier.Copy(&klineModel, &kline)
 	if err != nil {
 		return err
 	}
 
-	var BinanceKlineRepo interfaces.BinanceKlineRepository
+	var BinanceKlineRepo binance2.BinanceKlineRepository
 	container.Make(&BinanceKlineRepo)
 
 	BinanceKlineRepo.Create(klineModel)
