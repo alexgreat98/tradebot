@@ -9,7 +9,7 @@ import (
 	"github.com/webdelo/tradebot/pkg/strategy/pinbar"
 )
 
-// Run binancews ws listeners
+// BinanceRun binancews ws listeners
 func BinanceRun(ctx *context.Context) error {
 
 	if err := listenKlineChannel(ctx); err != nil {
