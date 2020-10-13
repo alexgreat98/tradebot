@@ -1,4 +1,4 @@
-package ws
+package sockets
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 )
 
 func Run(ctx *context.Context) error {
-	// Run Binance ws listening
+	// Run Binance sockets listening
 	err := BinanceRun(ctx)
 	web.Run()
 	return err

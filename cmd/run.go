@@ -2,10 +2,9 @@ package cmd
 
 import (
 	"context"
-	_ "github.com/adshao/go-binance"
 	"github.com/webdelo/tradebot/providers"
 	"github.com/webdelo/tradebot/server"
-	"github.com/webdelo/tradebot/ws"
+	"github.com/webdelo/tradebot/sockets"
 )
 
 func Run() error {
@@ -17,7 +16,7 @@ func Run() error {
 	}
 
 	// start web-sockets listening
-	if err := ws.Run(&ctx); err != nil {
+	if err := sockets.Run(&ctx); err != nil {
 		return err
 	}
 

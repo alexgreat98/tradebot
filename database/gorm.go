@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/webdelo/tradebot/pkg/binance"
+	"github.com/webdelo/tradebot/pkg/binance/binance"
 	sqliteGorm "gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -13,7 +13,7 @@ func Sqlite() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// start ws listening
+	// start sockets listening
 	if err := autoMigrate(sqlite); err != nil {
 		return nil, err
 	}

@@ -2,14 +2,13 @@ package market
 
 import (
 	"container/list"
-	"fmt"
 	"github.com/webdelo/tradebot/pkg/observer"
 )
 
 type KlineStorage struct {
 	observer.ObservableImpl
 
-	interval     string
+	interval     Interval
 	size         int
 	currentKline Kline
 	list         *list.List
@@ -17,7 +16,7 @@ type KlineStorage struct {
 }
 
 // NewKlineStorage instance new
-func NewKlineStorage(interval string, size int) *KlineStorage {
+func NewKlineStorage(interval Interval, size int) *KlineStorage {
 	return &KlineStorage{
 		interval: interval,
 		size:     size,
@@ -42,14 +41,14 @@ func (s *KlineStorage) SetKline(kline Kline) *KlineStorage {
 	}
 	s.currentKline = kline
 
-	// Notify observers about new kline
+	// Notify subscribers about new kline
 	s.NotifySubscribers("KlineStorageUpdated", s)
 
 	return s
 }
 
 // GetInterval retrieve interval for stored kline-list
-func (s *KlineStorage) GetInterval() string {
+func (s *KlineStorage) GetInterval() Interval {
 	return s.interval
 }
 
@@ -59,7 +58,7 @@ func (s *KlineStorage) GetCurrent() Kline {
 }
 
 // GetCurrentVolume retrieve volume for the current (last) kline
-func (s *KlineStorage) GetCurrentVolume() string {
+func (s *KlineStorage) GetCurrentVolume() int64 {
 	return s.currentKline.GetVolume()
 }
 
@@ -74,12 +73,13 @@ func (s *KlineStorage) GetLastList() *list.List {
 }
 
 // GetLastListVolume retrieve volume summary for the last market kline-list
-func (s *KlineStorage) GetLastListVolume() string {
-	// TODO: convert string type to numeric
+func (s *KlineStorage) GetLastListVolume() int64 {
+	var sum int64 = 0
 	for e := s.list.Front(); e != nil; e = e.Next() {
-		fmt.Println(e.Value)
+		k := e.Value.(Kline)
+		sum += k.GetVolume()
 	}
-	return ""
+	return sum
 }
 
 // GetLastListTradeNum retrieve trades numbers summary for the last market kline-list

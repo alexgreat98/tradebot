@@ -1,38 +1,39 @@
-package klineobservers
+package binancewsobservers
 
 import (
 	"fmt"
-	"github.com/adshao/go-binance"
 	"github.com/golobby/container"
 	"github.com/jinzhu/copier"
-	binance2 "github.com/webdelo/tradebot/pkg/binance"
-	interfaces "github.com/webdelo/tradebot/interfaces/repositories/binance"
-	binanceModels "github.com/webdelo/tradebot/models/markets/binance"
-	web "github.com/webdelo/tradebot/sockets/web/binance"
+	binance2 "github.com/webdelo/tradebot/pkg/binance/binance"
+	"github.com/webdelo/tradebot/pkg/market"
 	"strconv"
 )
-
-type klineToDB struct {
-	key string
-}
 
 var currentKlineToDBKey int = 1
 
 func NewKlineToDB() *klineToDB {
 	observer := new(klineToDB)
 	// set default key
-	observer.SetKey("kline.to.db.observer." + strconv.Itoa(currentKlineToDBKey))
+	observer.key = "kline.to.db.observer." + strconv.Itoa(currentKlineToDBKey)
 	currentKlineToDBKey++
 
 	return observer
 }
 
+type klineToDB struct {
+	key string
+}
+
+func (obj *klineToDB) ObserverKey() string {
+	return obj.key
+}
+
 func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
 	// TODO: use named type for event detection
 	if event == "KlineIssued" {
-		binanceKlineEvent, ok := data.(*binance.WsKlineEvent)
+		kline, ok := data.(*market.KlineDTO)
 		if ok {
-			err := obj.StoreKline(binanceKlineEvent.Kline)
+			err := obj.StoreKline(kline)
 			if err != nil {
 				return err
 			}
@@ -44,13 +45,16 @@ func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
 }
 
 // StoreKline method store in DB new Kline
-func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
+func (obj *klineToDB) StoreKline(kline *market.KlineDTO) error {
 	var klineModel *binance2.Kline
 	klineModel = new(binance2.Kline)
 	err := copier.Copy(&klineModel, &kline)
 	if err != nil {
 		return err
 	}
+
+	klineModel.Symbol = kline.Symbol.Code
+	klineModel.Interval = kline.Interval.Code
 
 	var BinanceKlineRepo binance2.BinanceKlineRepository
 	container.Make(&BinanceKlineRepo)
@@ -59,14 +63,4 @@ func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
 	go func() { web.Messages <- klineModel }()
 	fmt.Println("Stored successfully! ", klineModel)
 	return nil
-}
-
-func (obj *klineToDB) ObserverKey() string {
-	return obj.key
-}
-
-// SetKey set needed observer key
-func (obj *klineToDB) SetKey(key string) *klineToDB {
-	obj.key = key
-	return obj
 }
