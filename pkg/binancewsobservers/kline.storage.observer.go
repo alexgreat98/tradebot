@@ -1,4 +1,4 @@
-package klineobservers
+package binancewsobservers
 
 import (
 	"github.com/webdelo/tradebot/pkg/market"
