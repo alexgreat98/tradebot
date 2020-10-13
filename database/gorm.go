@@ -1,7 +1,7 @@
 package database
 
 import (
-	"github.com/webdelo/tradebot/pkg/binance"
+	binance2 "github.com/webdelo/tradebot/pkg/binance/binance"
 	sqliteGorm "gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -23,7 +23,7 @@ func Sqlite() (*gorm.DB, error) {
 
 // autoMigrate create tables for needed models
 func autoMigrate(db *gorm.DB) error {
-	err := db.AutoMigrate(&binance.Kline{})
+	err := db.AutoMigrate(&binance2.Kline{})
 	if err != nil {
 		return err
 	}

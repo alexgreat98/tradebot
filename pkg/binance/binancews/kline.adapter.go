@@ -2,7 +2,7 @@ package binancews
 
 import (
 	"github.com/adshao/go-binance"
-	binanceLocal "github.com/webdelo/tradebot/pkg/binance"
+	binance2 "github.com/webdelo/tradebot/pkg/binance/binance"
 	"github.com/webdelo/tradebot/pkg/market"
 	"github.com/webdelo/tradebot/pkg/utils"
 )
@@ -11,12 +11,12 @@ import (
 func WSKlineToDTO(wsKline binance.WsKline) (*market.KlineDTO, error) {
 	dto := new(market.KlineDTO)
 
-	symbol := binanceLocal.Symbols[wsKline.Symbol]
+	symbol := binance2.Symbols[wsKline.Symbol]
 
 	dto.StartTime = wsKline.StartTime
 	dto.EndTime = wsKline.EndTime
 	dto.Symbol = symbol
-	dto.Interval = binanceLocal.Intervals[wsKline.Interval]
+	dto.Interval = binance2.Intervals[wsKline.Interval]
 
 	amount, err := utils.ToCoinsFromString(wsKline.Open, symbol.QuoteAssetPrecision)
 	if err != nil {

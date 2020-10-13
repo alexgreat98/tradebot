@@ -2,9 +2,9 @@ package sockets
 
 import (
 	"context"
-	"github.com/webdelo/tradebot/pkg/binance"
-	"github.com/webdelo/tradebot/pkg/binancews"
-	"github.com/webdelo/tradebot/pkg/binancewsobservers"
+	"github.com/webdelo/tradebot/pkg/binance/binance"
+	"github.com/webdelo/tradebot/pkg/binance/binancews"
+	"github.com/webdelo/tradebot/pkg/binance/binancewsobservers"
 	"github.com/webdelo/tradebot/pkg/market"
 	"github.com/webdelo/tradebot/pkg/strategy/pinbar"
 )
