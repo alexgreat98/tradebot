@@ -22,7 +22,24 @@ var (
 	}
 
 	Symbols = map[string]market.Symbol{
-		"btcusdt": market.Symbol{Code: "BTCUSDT"},
-		"ethusdt": market.Symbol{Code: "ETHUSDT"},
+		"BTCUSDT": market.Symbol{
+			Code: "BTCUSDT",
+
+			BaseAsset:          "BTC",
+			BaseAssetPrecision: 8,
+
+			QuoteAsset:          "USDT",
+			QuoteAssetPrecision: 8,
+		},
+
+		"ETHUSDT": market.Symbol{
+			Code: "ETHUSDT",
+
+			BaseAsset:          "ETH",
+			BaseAssetPrecision: 8,
+
+			QuoteAsset:          "USDT",
+			QuoteAssetPrecision: 8,
+		},
 	}
 )

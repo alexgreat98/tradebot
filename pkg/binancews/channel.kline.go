@@ -13,7 +13,7 @@ func NewKlineChannel() *KlineChannel {
 	return new(KlineChannel)
 }
 
-// KlineChannel get info from sockets and notify binancewssubscribers
+// KlineChannel get info from sockets and notify subscribers
 type KlineChannel struct {
 	observer.ObservableImpl
 }
@@ -26,7 +26,12 @@ func (kl *KlineChannel) Listen(
 ) (doneC, stopC chan struct{}, err error) {
 	wsKlineHandler := func(event *binance.WsKlineEvent) {
 		// TODO: use named type for event detection
-		kl.NotifySubscribers("KlineIssued", event)
+		klineDTO, err := WSKlineToDTO(event.Kline)
+		if err != nil {
+			// TODO: log error
+			fmt.Println(err)
+		}
+		kl.NotifySubscribers("KlineIssued", klineDTO)
 	}
 
 	errHandler := func(err error) {

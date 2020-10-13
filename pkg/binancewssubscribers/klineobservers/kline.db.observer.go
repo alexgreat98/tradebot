@@ -2,10 +2,10 @@ package klineobservers
 
 import (
 	"fmt"
-	"github.com/adshao/go-binance"
 	"github.com/golobby/container"
 	"github.com/jinzhu/copier"
-	binance2 "github.com/webdelo/tradebot/pkg/binance"
+	"github.com/webdelo/tradebot/pkg/binance"
+	"github.com/webdelo/tradebot/pkg/market"
 	"strconv"
 )
 
@@ -31,9 +31,9 @@ func (obj *klineToDB) ObserverKey() string {
 func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
 	// TODO: use named type for event detection
 	if event == "KlineIssued" {
-		binanceKlineEvent, ok := data.(*binance.WsKlineEvent)
+		kline, ok := data.(*market.KlineDTO)
 		if ok {
-			err := obj.StoreKline(binanceKlineEvent.Kline)
+			err := obj.StoreKline(kline)
 			if err != nil {
 				return err
 			}
@@ -45,15 +45,18 @@ func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
 }
 
 // StoreKline method store in DB new Kline
-func (obj *klineToDB) StoreKline(kline binance.WsKline) error {
-	var klineModel *binance2.Kline
-	klineModel = new(binance2.Kline)
+func (obj *klineToDB) StoreKline(kline *market.KlineDTO) error {
+	var klineModel *binance.Kline
+	klineModel = new(binance.Kline)
 	err := copier.Copy(&klineModel, &kline)
 	if err != nil {
 		return err
 	}
 
-	var BinanceKlineRepo binance2.BinanceKlineRepository
+	klineModel.Symbol = kline.Symbol.Code
+	klineModel.Interval = kline.Interval.Code
+
+	var BinanceKlineRepo binance.BinanceKlineRepository
 	container.Make(&BinanceKlineRepo)
 
 	BinanceKlineRepo.Create(klineModel)

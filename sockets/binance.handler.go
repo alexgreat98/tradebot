@@ -28,7 +28,7 @@ func BinanceRun(ctx *context.Context) error {
 func listenKlineChannel(ctx *context.Context) error {
 	klineChannel := binancews.NewKlineChannel()
 
-	// Attach binancewssubscribers that store kline to DB
+	// Attach subscribers that store kline to DB
 	klineChannel.Subscribe(
 		klineobservers.NewKlineToDB(),
 	)
@@ -47,7 +47,7 @@ func listenKlineChannel(ctx *context.Context) error {
 	// Start channel listening
 	_, _, err := klineChannel.Listen(
 		ctx,
-		binance.Symbols["btcusdt"],
+		binance.Symbols["BTCUSDT"],
 		binance.Intervals["1m"],
 	)
 
