@@ -9,8 +9,8 @@ package market
 //	// SetKline append new kline to the list
 //	SetKline(kline Kline) KlineStorage
 //
-//	// GetInterval retrieve interval for stored kline-list
-//	GetInterval() string
+//	// interval retrieve interval for stored kline-list
+//	interval() string
 //
 //	// GetCurrent retrieve the current (last) market kline (could be NOT finished!)
 //	GetCurrent() Kline

@@ -16,6 +16,10 @@ func BinanceRun(ctx *context.Context) error {
 		return err
 	}
 
+	if err := listenTradeChannel(ctx); err != nil {
+		return err
+	}
+
 	//TODO: move listening starting to handler
 	//channels.ListenKline(ctx)
 	//
@@ -50,6 +54,24 @@ func listenKlineChannel(ctx *context.Context) error {
 		binance.Symbols["BTCUSDT"],
 		binance.Intervals["1m"],
 	)
+
+	if err != nil {
+		return err
+	}
+
+	// TODO: save done&stop channels
+
+	return nil
+}
+
+func listenTradeChannel(ctx *context.Context) error {
+	channel := binancews.NewTradeChannel()
+
+	tradeToKline := binancewsobservers.NewTradeToKlineGenerator()
+
+	channel.Subscribe(tradeToKline)
+
+	_, _, err := channel.Listen(ctx, binance.Symbols["BTCUSDT"])
 
 	if err != nil {
 		return err
