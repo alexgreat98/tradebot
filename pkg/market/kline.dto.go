@@ -1,63 +1,92 @@
 package market
 
-type KlineDTO struct {
-	StartTime int64
-	EndTime   int64
-	Symbol    Symbol
-	Interval  Interval
-	Open      int64
-	Close     int64
-	High      int64
-	Low       int64
-	Volume    int64
-	TradeNum  int64
-	IsFinal   bool
+// NewKlineDto constructor for new dto creation
+func NewKlineDto(
+	startTime int64,
+	endTime int64,
+	symbol Symbol,
+	interval Interval,
+	open int64,
+	close int64,
+	high int64,
+	low int64,
+	volume int64,
+	tradeNum int64,
+	isFinal bool,
+) *KlineDto {
+	return &KlineDto{
+		startTime: startTime,
+		endTime:   endTime,
+		symbol:    symbol,
+		interval:  interval,
+		open:      open,
+		close:     close,
+		high:      high,
+		low:       low,
+		volume:    volume,
+		tradeNum:  tradeNum,
+		isFinal:   isFinal,
+	}
 }
 
-func (k *KlineDTO) GetStartTime() int64 {
-	return k.StartTime
+type KlineDto struct {
+	startTime int64
+	endTime   int64
+	symbol    Symbol
+	interval  Interval
+	open      int64
+	close     int64
+	high      int64
+	low       int64
+	volume    int64
+	tradeNum  int64
+	isFinal   bool
 }
 
-func (k *KlineDTO) GetEndTime() int64 {
-	return k.EndTime
+func (k *KlineDto) StartTime() int64 {
+	return k.startTime
 }
 
-func (k *KlineDTO) GetSymbol() Symbol {
-	return k.Symbol
+func (k *KlineDto) EndTime() int64 {
+	return k.endTime
 }
 
-func (k *KlineDTO) GetInterval() Interval {
-	return k.Interval
+func (k *KlineDto) Symbol() Symbol {
+	return k.symbol
 }
 
-func (k *KlineDTO) GetOpen() int64 {
-	return k.Open
+func (k *KlineDto) Interval() Interval {
+	return k.interval
 }
 
-func (k *KlineDTO) GetClose() int64 {
-	return k.Close
+func (k *KlineDto) Open() int64 {
+	return k.open
 }
 
-func (k *KlineDTO) GetHigh() int64 {
-	return k.High
+func (k *KlineDto) Close() int64 {
+	return k.close
 }
 
-func (k *KlineDTO) GetLow() int64 {
-	return k.Low
+func (k *KlineDto) High() int64 {
+	return k.high
 }
 
-func (k *KlineDTO) GetVolume() int64 {
-	return k.Volume
+func (k *KlineDto) Low() int64 {
+	return k.low
 }
 
-func (k *KlineDTO) GetTradeNum() int64 {
-	return k.TradeNum
+func (k *KlineDto) Volume() int64 {
+	return k.volume
 }
 
-func (k *KlineDTO) IsCompleted() bool {
-	return k.IsFinal
+func (k *KlineDto) TradeNum() int64 {
+	return k.tradeNum
 }
 
-func (k *KlineDTO) InProgress() bool {
-	return !k.IsFinal
+func (k *KlineDto) IsCompleted() bool {
+	return k.isFinal
+}
+
+func (k *KlineDto) InProgress() bool {
+	return !k.isFinal
 }

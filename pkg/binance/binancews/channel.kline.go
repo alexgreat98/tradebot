@@ -25,13 +25,12 @@ func (kl *KlineChannel) Listen(
 	interval market.Interval,
 ) (doneC, stopC chan struct{}, err error) {
 	wsKlineHandler := func(event *binance.WsKlineEvent) {
-		// TODO: use named type for event detection
-		klineDTO, err := WSKlineToDTO(event.Kline)
+		klineDTO, err := ConvertWSKlineToDto(event.Kline)
 		if err != nil {
 			// TODO: log error
 			fmt.Println(err)
 		}
-		kl.NotifySubscribers("KlineIssued", klineDTO)
+		kl.NotifySubscribers(KlineIssuedEvent, klineDTO)
 	}
 
 	errHandler := func(err error) {

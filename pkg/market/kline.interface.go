@@ -2,19 +2,19 @@ package market
 
 // Kline interface is the data contract for all kline entities
 type Kline interface {
-	GetStartTime() int64
-	GetEndTime() int64
+	StartTime() int64
+	EndTime() int64
 
-	GetSymbol() Symbol
-	GetInterval() Interval
+	Symbol() Symbol
+	Interval() Interval
 
-	GetOpen() int64
-	GetClose() int64
-	GetHigh() int64
-	GetLow() int64
+	Open() int64
+	Close() int64
+	High() int64
+	Low() int64
 
-	GetVolume() int64
-	GetTradeNum() int64
+	Volume() int64
+	TradeNum() int64
 
 	IsCompleted() bool
 	InProgress() bool

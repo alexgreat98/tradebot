@@ -8,68 +8,68 @@ import (
 type Kline struct {
 	gorm.Model
 
-	StartTime    int64  `json:"start_time"`
-	EndTime      int64  `json:"end_time"`
-	Symbol       string `json:"symbol"`
-	Interval     string `json:"interval"`
-	FirstTradeID int64  `json:"first_trade_id"`
-	LastTradeID  int64  `json:"last_trade_id"`
-	Open         int64  `json:"open"`
-	Close        int64  `json:"close"`
-	High         int64  `json:"high"`
-	Low          int64  `json:"low"`
-	Volume       int64  `json:"volume"`
-	TradeNum     int64  `json:"trade_numbers"`
-	IsFinal      bool   `json:"is_final"`
+	startTime    int64  `json:"start_time"`
+	endTime      int64  `json:"end_time"`
+	symbol       string `json:"symbol"`
+	interval     string `json:"interval"`
+	firstTradeID int64  `json:"first_trade_id"`
+	lastTradeID  int64  `json:"last_trade_id"`
+	open         int64  `json:"open"`
+	close        int64  `json:"close"`
+	high         int64  `json:"high"`
+	low          int64  `json:"low"`
+	volume       int64  `json:"volume"`
+	tradeNum     int64  `json:"trade_numbers"`
+	isFinal      bool   `json:"is_final"`
 	//QuoteVolume          int64  `json:"quote_volume"`
 	//ActiveBuyVolume      int64  `json:"active_buy_volume"`
 	//ActiveBuyQuoteVolume int64  `json:"active_buy_quote_volume"`
 }
 
-func (k *Kline) GetStartTime() int64 {
-	return k.StartTime
+func (k *Kline) StartTime() int64 {
+	return k.startTime
 }
 
-func (k *Kline) GetEndTime() int64 {
-	return k.EndTime
+func (k *Kline) EndTime() int64 {
+	return k.endTime
 }
 
-func (k *Kline) GetSymbol() market.Symbol {
-	return Symbols[k.Symbol]
+func (k *Kline) Symbol() market.Symbol {
+	return Symbols[k.symbol]
 }
 
-func (k *Kline) GetInterval() market.Interval {
-	return Intervals[k.Interval]
+func (k *Kline) Interval() market.Interval {
+	return Intervals[k.interval]
 }
 
-func (k *Kline) GetOpen() int64 {
-	return k.Open
+func (k *Kline) Open() int64 {
+	return k.open
 }
 
-func (k *Kline) GetClose() int64 {
-	return k.Close
+func (k *Kline) Close() int64 {
+	return k.close
 }
 
-func (k *Kline) GetHigh() int64 {
-	return k.High
+func (k *Kline) High() int64 {
+	return k.high
 }
 
-func (k *Kline) GetLow() int64 {
-	return k.Low
+func (k *Kline) Low() int64 {
+	return k.low
 }
 
-func (k *Kline) GetVolume() int64 {
-	return k.Volume
+func (k *Kline) Volume() int64 {
+	return k.volume
 }
 
-func (k *Kline) GetTradeNum() int64 {
-	return k.TradeNum
+func (k *Kline) TradeNum() int64 {
+	return k.tradeNum
 }
 
 func (k *Kline) IsCompleted() bool {
-	return k.IsFinal
+	return k.isFinal
 }
 
 func (k *Kline) InProgress() bool {
-	return !k.IsFinal
+	return !k.isFinal
 }

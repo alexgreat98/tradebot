@@ -59,12 +59,12 @@ func (s *KlineStorage) GetCurrent() Kline {
 
 // GetCurrentVolume retrieve volume for the current (last) kline
 func (s *KlineStorage) GetCurrentVolume() int64 {
-	return s.currentKline.GetVolume()
+	return s.currentKline.Volume()
 }
 
 // GetCurrentTradeNum retrieve trades numbers for the current (last) kline
 func (s *KlineStorage) GetCurrentTradeNum() int64 {
-	return s.currentKline.GetTradeNum()
+	return s.currentKline.TradeNum()
 }
 
 // GetLastList retrieve last market kline list
@@ -77,7 +77,7 @@ func (s *KlineStorage) GetLastListVolume() int64 {
 	var sum int64 = 0
 	for e := s.list.Front(); e != nil; e = e.Next() {
 		k := e.Value.(Kline)
-		sum += k.GetVolume()
+		sum += k.Volume()
 	}
 	return sum
 }
@@ -87,7 +87,7 @@ func (s *KlineStorage) GetLastListTradeNum() int64 {
 	var sum int64 = 0
 	for e := s.list.Front(); e != nil; e = e.Next() {
 		k := e.Value.(Kline)
-		sum += k.GetTradeNum()
+		sum += k.TradeNum()
 	}
 	return sum
 }

@@ -1,10 +1,7 @@
 package binancewsobservers
 
 import (
-	"fmt"
-	"github.com/golobby/container"
-	"github.com/jinzhu/copier"
-	binance2 "github.com/webdelo/tradebot/pkg/binance/binance"
+	"github.com/webdelo/tradebot/pkg/binance/binancews"
 	"github.com/webdelo/tradebot/pkg/market"
 	web "github.com/webdelo/tradebot/sockets/web/binance"
 	"strconv"
@@ -31,8 +28,8 @@ func (obj *klineToDB) ObserverKey() string {
 
 func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
 	// TODO: use named type for event detection
-	if event == "KlineIssued" {
-		kline, ok := data.(*market.KlineDTO)
+	if event == binancews.KlineIssuedEvent {
+		kline, ok := data.(*market.KlineDto)
 		if ok {
 			err := obj.StoreKline(kline)
 			if err != nil {
@@ -46,22 +43,23 @@ func (obj *klineToDB) HandleEvent(event string, data interface{}) error {
 }
 
 // StoreKline method store in DB new Kline
-func (obj *klineToDB) StoreKline(kline *market.KlineDTO) error {
-	var klineModel *binance2.Kline
-	klineModel = new(binance2.Kline)
-	err := copier.Copy(&klineModel, &kline)
-	if err != nil {
-		return err
-	}
+func (obj *klineToDB) StoreKline(kline *market.KlineDto) error {
+	//var klineModel *binance2.Kline
+	//klineModel = new(binance2.Kline)
+	// TODO: use convertor! Copier does not works now!
+	//err := copier.Copy(&klineModel, &kline)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//klineModel.symbol = kline.Symbol().Code
+	//klineModel.Interval = kline.Interval().Code
+	//
+	//var BinanceKlineRepo binance2.BinanceKlineRepository
+	//container.Make(&BinanceKlineRepo)
+	//
+	//BinanceKlineRepo.Create(klineModel)
 
-	klineModel.Symbol = kline.Symbol.Code
-	klineModel.Interval = kline.Interval.Code
-
-	var BinanceKlineRepo binance2.BinanceKlineRepository
-	container.Make(&BinanceKlineRepo)
-
-	BinanceKlineRepo.Create(klineModel)
-	go func() { web.Messages <- klineModel }()
-	fmt.Println("Stored successfully! ", klineModel)
+	//fmt.Println("Stored successfully! ", klineModel)
 	return nil
 }
