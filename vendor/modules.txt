@@ -18,6 +18,7 @@ github.com/gofiber/fiber/v2/internal/encoding/ascii
 github.com/gofiber/fiber/v2/internal/encoding/json
 github.com/gofiber/fiber/v2/internal/isatty
 github.com/gofiber/fiber/v2/internal/schema
+github.com/gofiber/fiber/v2/middleware/cors
 github.com/gofiber/fiber/v2/utils
 # github.com/golobby/container v1.3.0
 ## explicit
@@ -25,15 +26,6 @@ github.com/golobby/container
 github.com/golobby/container/pkg/container
 # github.com/googollee/go-socket.io v1.4.4
 ## explicit
-github.com/googollee/go-socket.io
-github.com/googollee/go-socket.io/engineio
-github.com/googollee/go-socket.io/engineio/base
-github.com/googollee/go-socket.io/engineio/packet
-github.com/googollee/go-socket.io/engineio/payload
-github.com/googollee/go-socket.io/engineio/transport
-github.com/googollee/go-socket.io/engineio/transport/polling
-github.com/googollee/go-socket.io/engineio/transport/websocket
-github.com/googollee/go-socket.io/parser
 # github.com/gorilla/websocket v1.4.2
 ## explicit
 github.com/gorilla/websocket

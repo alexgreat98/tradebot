@@ -15,6 +15,12 @@ type GormBinanceKlineRepo struct {
 	db *gorm.DB
 }
 
+func (repo GormBinanceKlineRepo) Find() []Kline {
+	var kline []Kline
+	repo.db.Find(&kline)
+	return kline
+}
+
 // Create store in DB the Kline model
 func (repo GormBinanceKlineRepo) Create(kline *Kline) *Kline {
 	repo.db.Create(kline)

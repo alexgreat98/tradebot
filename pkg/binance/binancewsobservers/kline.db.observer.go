@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/copier"
 	binance2 "github.com/webdelo/tradebot/pkg/binance/binance"
 	"github.com/webdelo/tradebot/pkg/market"
+	web "github.com/webdelo/tradebot/sockets/web/binance"
 	"strconv"
 )
 

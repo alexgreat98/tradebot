@@ -1,6 +1,10 @@
 package binance
 
 type BinanceKlineRepository interface {
+
+	//Find retrieving all objects
+	Find() []Kline
+
 	// Create store in DB the Kline model
 	Create(kline *Kline) *Kline
 
