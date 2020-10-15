@@ -16,6 +16,17 @@ type Kline interface {
 	Volume() int64
 	TradeNum() int64
 
-	IsCompleted() bool
+	IsFinal() bool
 	InProgress() bool
+
+	VolumeProfile() VolumeProfile
+}
+
+// VolumeProfile interface retrieve methods for analyzing volume range
+type VolumeProfile interface {
+	// VolumeSum retrieve summary of volume between prices
+	VolumeSum(startPrice int64, endPrice int64) int64
+
+	// VolumePercent retrieve percentage of volume between prices in comparison with total kline's volume
+	VolumePercent(startPrice int64, endPrice int64) int
 }
