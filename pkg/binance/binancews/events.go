@@ -1,6 +1,6 @@
 package binancews
 
-var (
+const (
 	TradeReceivedEvent = "NewTrade"
 
 	KlineIssuedEvent = "KlineIssued"

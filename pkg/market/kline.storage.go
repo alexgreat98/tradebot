@@ -29,7 +29,7 @@ func (s *KlineStorage) SetKline(kline Kline) *KlineStorage {
 	// Check if this first kline adding to storage
 	if s.currentKline != nil {
 		// If current kline is final move it to the last-list
-		if s.currentKline.IsCompleted() {
+		if s.currentKline.IsFinal() {
 			s.list.PushFront(s.currentKline)
 			// check if the list is full truncate the last kline
 			if s.list.Len() > s.size {
