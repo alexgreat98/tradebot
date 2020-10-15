@@ -3,7 +3,6 @@ package binancewsobservers
 import (
 	"github.com/webdelo/tradebot/pkg/binance/binancews"
 	"github.com/webdelo/tradebot/pkg/market"
-	web "github.com/webdelo/tradebot/sockets/web/binance"
 	"strconv"
 )
 

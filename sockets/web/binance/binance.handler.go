@@ -1,18 +1,20 @@
 package web
 
 import (
+	"fmt"
 	"github.com/webdelo/tradebot/pkg/market"
 	"net/http"
 )
 
-var Messages = make(chan market.Kline)
+var Messages = make(chan market.TradeDto)
 
 // helloFromClient is a method that handles messages from the app client.
 func helloFromClient(c *Client, data interface{}) {
 	for {
 		select {
 		case message := <-Messages:
-			c.send = Message{Name: "helloFromServer", Data: message}
+			fmt.Println("message", message.Price())
+			c.send = Message{Name: "helloFromServer", Data: message.Quantity()}
 			c.Write()
 		}
 	}
