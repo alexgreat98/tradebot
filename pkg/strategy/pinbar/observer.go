@@ -5,15 +5,18 @@ import (
 	"github.com/webdelo/tradebot/pkg/market"
 )
 
-func NewPinbarObserver() *PinbarObserver {
-	return new(PinbarObserver)
+func NewPinbarObserver(config Config) *Observer {
+	return &Observer{
+		config: config,
+	}
 }
 
-type PinbarObserver struct {
+type Observer struct {
+	config Config
 }
 
 //HandleEvent method for processing events from observable objects
-func (k PinbarObserver) HandleEvent(event string, data interface{}) error {
+func (k Observer) HandleEvent(event string, data interface{}) error {
 	fmt.Println("--------- PINBAR --------")
 	fmt.Println(event)
 	var storage *market.KlineStorage
@@ -24,6 +27,6 @@ func (k PinbarObserver) HandleEvent(event string, data interface{}) error {
 }
 
 //ObserverKey retrieve unique key (using for unsubscribe method)
-func (k PinbarObserver) ObserverKey() string {
+func (k Observer) ObserverKey() string {
 	return "pinbar.observer"
 }
