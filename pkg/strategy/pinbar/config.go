@@ -1,6 +1,7 @@
 package pinbar
 
 type Config struct {
-	TotalVolume int
+	TotalVolumeLimit int // определяет во сколько раз должен быть превышен объём текущей свечи
+	lastKlinesAmount int // определяет сколько предыдущих свечей должено быть проанализировано по объёму
 	// TODO: добавить остальные характеристики
 }

@@ -3,7 +3,8 @@ package pinbar
 import "github.com/webdelo/tradebot/pkg/market"
 
 type VolumeAnalyzer struct {
-	next Analyzer
+	next   Analyzer
+	config Config
 }
 
 func (fa *VolumeAnalyzer) Check(klineStorage *market.KlineStorage) bool {
