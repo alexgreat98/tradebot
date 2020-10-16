@@ -19,6 +19,9 @@ type Kline interface {
 	IsFinal() bool
 	InProgress() bool
 
+	IsRed() bool
+	IsGreen() bool
+
 	VolumeProfile() VolumeProfile
 }
 
