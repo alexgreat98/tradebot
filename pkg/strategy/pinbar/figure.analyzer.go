@@ -1,7 +1,6 @@
 package pinbar
 
 import (
-	"fmt"
 	"github.com/webdelo/tradebot/pkg/market"
 	"math"
 )
@@ -42,32 +41,15 @@ func (fa *FigureAnalyzer) isFigurePinbar(klineStorage *market.KlineStorage) bool
 	//--- Calculate the average body size of previous candlesticks
 	current.Volume()
 
-	fmt.Println(bodySize * 2)
-	fmt.Println(bodySize * 0.1)
-
 	// is "Hammer"
-	if shadeLow > bodySize*2 && shadeHigh < (close-low)*0.1 {
+	if shadeLow > bodySize*2 && shadeHigh < (bodySize+shadeLow)*0.1 {
+		return true
+	}
+	// is "invert Hammer"
+	if shadeLow < (bodySize+shadeHigh)*0.1 && shadeHigh > bodySize*2 {
 		return true
 	}
 
-	// is "Hammer"
-	if (high-low) > 3*(open-close) && (close-low)/(0.001+high-low) > 0.6 && ((open-low)/0.001+high-low) > 0.6 {
-		return true
-	}
-
-	// is "Hammer"
-	if shadeHigh < (close - low) {
-		return true
-	}
-
-	// is "Handing Man"
-	if (high-low) > 4*(open-close) && (close-low)/(0.001+high-low) >= 0.75 && ((open-low)/0.001+high-low) >= 0.75 {
-		return true
-	}
-	// is invert hammer
-	if shadeLow < bodySize*0.1 && shadeHigh > bodySize*2 {
-		return true
-	}
 	// TODO: реализовать логику анализа формы фигуры свечи
 	// klineStorage.GetCurrent() - анализируй форму текущей свечи из хранилища на соответствие пинбару
 	// граничные условия бери из конфиг-структуры так, чтобы их можно было менять на стадии запуска анализатора
