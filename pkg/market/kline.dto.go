@@ -1,5 +1,7 @@
 package market
 
+import "math"
+
 // NewKlineDto constructor for new dto creation
 func NewKlineDto(
 	startTime int64,
@@ -28,7 +30,7 @@ func NewKlineDto(
 		tradeNum:  tradeNum,
 		isFinal:   isFinal,
 
-		volumeProfile: MapVolumeProfile{},
+		volumeProfile: NewMapVolumeProfile(),
 	}
 }
 
@@ -45,7 +47,7 @@ type KlineDto struct {
 	tradeNum  int64
 	isFinal   bool
 
-	volumeProfile MapVolumeProfile
+	volumeProfile *MapVolumeProfile
 }
 
 func (k *KlineDto) StartTime() int64 {
@@ -96,22 +98,53 @@ func (k *KlineDto) InProgress() bool {
 	return !k.isFinal
 }
 
+func (k *KlineDto) IsRed() bool {
+	return k.Open() > k.Close()
+}
+
+func (k *KlineDto) IsGreen() bool {
+	return !k.IsRed()
+}
+
 func (k *KlineDto) VolumeProfile() VolumeProfile {
 	return k.volumeProfile
 }
 
+func NewMapVolumeProfile() *MapVolumeProfile {
+	return &MapVolumeProfile{
+		volume: make(map[int64]int64),
+		total:  0,
+	}
+}
+
+// MapVolumeProfile implement VolumeProfile using map storage
 type MapVolumeProfile struct {
 	volume map[int64]int64
+	total  int64
+}
+
+// AddTrade attach volume to the map
+func (mvp *MapVolumeProfile) AddTrade(trade Trade) *MapVolumeProfile {
+	amount, _ := mvp.volume[trade.Price()]
+	amount = amount + trade.Quantity()
+	mvp.volume[trade.Price()] = amount
+	mvp.total += trade.Quantity()
+	return mvp
 }
 
 // VolumeSum retrieve summary of volume between prices
 func (mvp MapVolumeProfile) VolumeSum(startPrice int64, endPrice int64) int64 {
-	// todo: реализовать метод
-	return 0
+	var sum int64
+	for price, volume := range mvp.volume {
+		if price >= startPrice && price <= endPrice {
+			sum += volume
+		}
+	}
+	return sum
 }
 
 // VolumePercent retrieve percentage of volume between prices in comparison with total kline's volume
 func (mvp MapVolumeProfile) VolumePercent(startPrice int64, endPrice int64) int {
-	// todo: реализовать метод
-	return 0
+	sum := mvp.VolumeSum(startPrice, endPrice)
+	return int(math.RoundToEven(float64(sum) / float64(mvp.total) * 100))
 }

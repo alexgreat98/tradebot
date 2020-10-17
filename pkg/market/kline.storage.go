@@ -2,6 +2,8 @@ package market
 
 import (
 	"container/list"
+	"errors"
+	"fmt"
 	"github.com/webdelo/tradebot/pkg/observer"
 )
 
@@ -105,4 +107,24 @@ func (s *KlineStorage) CountLastList() int {
 // IsStorageReady detect is last-list is full (if that is so important to work with full list for some analytics modules)
 func (s *KlineStorage) IsStorageReady() bool {
 	return s.GetStorageSize() == s.CountLastList()
+}
+
+func (s *KlineStorage) HandleEvent(event string, data interface{}) error {
+	if event == KlineIssuedEvent {
+		kline, err := data.(*KlineDto)
+		if err == false {
+			return errors.New("Can't convert interface{} to Kline!")
+		}
+		s.SetKline(kline)
+
+		fmt.Println("--------------- Kline Storage ----------")
+		fmt.Println("s.GetCurrent()", s.GetCurrent())
+		fmt.Println("s.IsStorageReady()", s.IsStorageReady())
+		fmt.Println("s.CountLastList()", s.CountLastList())
+	}
+	return nil
+}
+
+func (s *KlineStorage) ObserverKey() string {
+	return "kline.storage." + s.interval.Code
 }

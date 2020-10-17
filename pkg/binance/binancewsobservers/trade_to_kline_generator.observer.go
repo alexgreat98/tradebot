@@ -1,20 +1,21 @@
 package binancewsobservers
 
 import (
-	"fmt"
 	"github.com/webdelo/tradebot/pkg/binance/binancews"
 	"github.com/webdelo/tradebot/pkg/market"
 	"strconv"
 )
 
 type TradeToKlineGenerator struct {
-	key string
+	key            string
+	klineGenerator *market.KlineGenerator
 }
 
 var currentTradeToKlineGeneratorKey int = 1
 
-func NewTradeToKlineGenerator() *TradeToKlineGenerator {
+func NewTradeToKlineGenerator(klineGenerator *market.KlineGenerator) *TradeToKlineGenerator {
 	observer := new(TradeToKlineGenerator)
+	observer.klineGenerator = klineGenerator
 
 	// set default key
 	observer.SetKey("trade.to.kline.generator.observer." + strconv.Itoa(currentTradeToKlineGeneratorKey))
@@ -40,9 +41,10 @@ func (o *TradeToKlineGenerator) HandleEvent(event string, data interface{}) erro
 
 // ProcessKline method store in DB new Kline
 func (o *TradeToKlineGenerator) ProcessKline(trade *market.TradeDto) error {
-	fmt.Println("--------- Trade -----------")
-	fmt.Println(trade)
-
+	err := o.klineGenerator.SetTrade(trade)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
