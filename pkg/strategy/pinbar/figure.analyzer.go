@@ -11,7 +11,8 @@ type FigureAnalyzer struct {
 }
 
 func (fa *FigureAnalyzer) Check(klineStorage *market.KlineStorage) bool {
-	if fa.isFigurePinbar(klineStorage) {
+	var isHammerFigure, _ = fa.isHammerFigure(klineStorage.GetCurrent())
+	if isHammerFigure {
 		if fa.next != nil {
 			return fa.next.Check(klineStorage)
 		}
@@ -20,45 +21,54 @@ func (fa *FigureAnalyzer) Check(klineStorage *market.KlineStorage) bool {
 	return false
 }
 
-func (fa *FigureAnalyzer) isFigurePinbar(klineStorage *market.KlineStorage) bool {
-	current := klineStorage.GetCurrent()
-	open := float64(current.Open())
-	close := float64(current.Close())
-	low := float64(current.Low())
-	high := float64(current.High())
+func (fa *FigureAnalyzer) isHammerFigure(kline market.Kline) (bool, bool) {
+	openValue := float64(kline.Open())
+	closeValue := float64(kline.Close())
+	lowValue := float64(kline.Low())
+	highValue := float64(kline.High())
 	//--- Define of it bullish or bearish
-	var bull = open < close
+	var bull = fa.isBullishPattern(kline)
 	//--- Get the absolute value of the candlestick body size
-	bodySize := math.Abs(open - close)
+	bodySize := math.Abs(openValue - closeValue)
 
 	//--- Get the size of shadows
-	shadeLow := close - low
-	shadeHigh := high - open
+	shadeLow := closeValue - lowValue
+	shadeHigh := highValue - openValue
 	if bull {
-		shadeLow = open - low
-		shadeHigh = high - close
+		shadeLow = openValue - lowValue
+		shadeHigh = highValue - closeValue
 	}
-	//--- Calculate the average body size of previous candlesticks
-	current.Volume()
 
 	// is "Hammer"
 	if shadeLow > bodySize*2 && shadeHigh < (bodySize+shadeLow)*0.1 {
-		return true
+		return true, false
 	}
 	// is "invert Hammer"
 	if shadeLow < (bodySize+shadeHigh)*0.1 && shadeHigh > bodySize*2 {
-		return true
+		return true, true
 	}
 
 	// TODO: реализовать логику анализа формы фигуры свечи
 	// klineStorage.GetCurrent() - анализируй форму текущей свечи из хранилища на соответствие пинбару
 	// граничные условия бери из конфиг-структуры так, чтобы их можно было менять на стадии запуска анализатора
 	// там пока только одно свойство, можешь добавить туда те, которые будут тут.
-	return false
+	return false, false
 }
 
-func (fa *FigureAnalyzer) isTrue(a int, b int) bool {
-	return a == b
+func (fa *FigureAnalyzer) isHangingManPattern(kline market.Kline) bool {
+	isHammer, isInvert := fa.isHammerFigure(kline)
+
+	return (isHammer && !isInvert) && !fa.isBullishPattern(kline)
+}
+
+func (fa *FigureAnalyzer) isShootingStarPattern(kline market.Kline) bool {
+	isHammer, isInvert := fa.isHammerFigure(kline)
+
+	return (isHammer && isInvert) && !fa.isBullishPattern(kline)
+}
+
+func (fa *FigureAnalyzer) isBullishPattern(kline market.Kline) bool {
+	return kline.Open() < kline.Close()
 }
 
 func (fa *FigureAnalyzer) SetNext(analyzer Analyzer) Analyzer {
