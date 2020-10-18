@@ -8,4 +8,5 @@ import (
 // Function define all web-routes
 func Define(app *fiber.App) {
 	app.Get("/", controllers.IndexPage)
+	app.Get("/kline", controllers.KlineIndex)
 }
