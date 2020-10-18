@@ -39,19 +39,17 @@ func (fa *FigureAnalyzer) isHammerFigure(kline market.Kline) (bool, bool) {
 		shadeHigh = highValue - closeValue
 	}
 
+	fullSize := bodySize + shadeLow + shadeHigh
+
 	// is "Hammer"
-	if shadeLow > bodySize*2 && shadeHigh < (bodySize+shadeLow)*0.1 {
+	if shadeLow >= bodySize*2 && shadeHigh <= fullSize*0.1 && shadeHigh <= fullSize*0.3 {
 		return true, false
 	}
 	// is "invert Hammer"
-	if shadeLow < (bodySize+shadeHigh)*0.1 && shadeHigh > bodySize*2 {
+	if shadeLow <= fullSize*0.1 && shadeHigh >= bodySize*2 && shadeLow <= fullSize*0.3 {
 		return true, true
 	}
 
-	// TODO: реализовать логику анализа формы фигуры свечи
-	// klineStorage.GetCurrent() - анализируй форму текущей свечи из хранилища на соответствие пинбару
-	// граничные условия бери из конфиг-структуры так, чтобы их можно было менять на стадии запуска анализатора
-	// там пока только одно свойство, можешь добавить туда те, которые будут тут.
 	return false, false
 }
 
