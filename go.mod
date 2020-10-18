@@ -9,7 +9,7 @@ require (
 	github.com/googollee/go-socket.io v1.4.4 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/configor v1.2.0
-	github.com/uniplaces/carbon v0.1.6
+	github.com/uniplaces/carbon v0.1.6 // indirect
 	gorm.io/driver/sqlite v1.1.3
 	gorm.io/gorm v1.20.2
 )

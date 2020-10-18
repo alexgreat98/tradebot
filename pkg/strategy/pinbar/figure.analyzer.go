@@ -11,7 +11,7 @@ type FigureAnalyzer struct {
 }
 
 func (fa *FigureAnalyzer) Check(klineStorage *market.KlineStorage) bool {
-	var isHammerFigure, _ = fa.isHammerFigure(klineStorage.GetCurrent())
+	var isHammerFigure, _ = fa.IsHammerFigure(klineStorage.GetCurrent())
 	if isHammerFigure {
 		if fa.next != nil {
 			return fa.next.Check(klineStorage)
@@ -21,7 +21,7 @@ func (fa *FigureAnalyzer) Check(klineStorage *market.KlineStorage) bool {
 	return false
 }
 
-func (fa *FigureAnalyzer) isHammerFigure(kline market.Kline) (bool, bool) {
+func (fa *FigureAnalyzer) IsHammerFigure(kline market.Kline) (bool, bool) {
 	openValue := float64(kline.Open())
 	closeValue := float64(kline.Close())
 	lowValue := float64(kline.Low())
@@ -53,14 +53,14 @@ func (fa *FigureAnalyzer) isHammerFigure(kline market.Kline) (bool, bool) {
 	return false, false
 }
 
-func (fa *FigureAnalyzer) isHangingManPattern(kline market.Kline) bool {
-	isHammer, isInvert := fa.isHammerFigure(kline)
+func (fa *FigureAnalyzer) IsHangingManPattern(kline market.Kline) bool {
+	isHammer, isInvert := fa.IsHammerFigure(kline)
 
 	return (isHammer && !isInvert) && !fa.isBullishPattern(kline)
 }
 
 func (fa *FigureAnalyzer) isShootingStarPattern(kline market.Kline) bool {
-	isHammer, isInvert := fa.isHammerFigure(kline)
+	isHammer, isInvert := fa.IsHammerFigure(kline)
 
 	return (isHammer && isInvert) && !fa.isBullishPattern(kline)
 }

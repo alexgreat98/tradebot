@@ -11,7 +11,7 @@ func TestIsHammerFigure(t *testing.T) {
 	var analyzer = FigureAnalyzer{}
 	var klineStorage = market.KlineStorage{}
 	klineStorage.SetKline(getBullishHammerKline())
-	ans, _ := analyzer.isHammerFigure(klineStorage.GetCurrent())
+	ans, _ := analyzer.IsHammerFigure(klineStorage.GetCurrent())
 
 	if !ans {
 		t.Error("Candle has Hammer figure")
@@ -30,10 +30,10 @@ func TestIsBullishPattern(t *testing.T) {
 }
 
 func TestIsInvertHammerFigure(t *testing.T) {
-	var analyzer = FigureAnalyzer{}
+	var analyzer = &FigureAnalyzer{}
 	var klineStorage = market.KlineStorage{}
 	klineStorage.SetKline(getBullishInvertHammerKline())
-	ans, isInvert := analyzer.isHammerFigure(klineStorage.GetCurrent())
+	ans, isInvert := analyzer.IsHammerFigure(klineStorage.GetCurrent())
 
 	if !ans {
 		t.Error("Candle has Hammer figure")
@@ -48,7 +48,7 @@ func TestIsHangingManFigure(t *testing.T) {
 	var analyzer = FigureAnalyzer{}
 	var klineStorage = market.KlineStorage{}
 	klineStorage.SetKline(getHangingManKline())
-	ans := analyzer.isHangingManPattern(klineStorage.GetCurrent())
+	ans := analyzer.IsHangingManPattern(klineStorage.GetCurrent())
 
 	if !ans {
 		t.Error("Candle has Hanging Man figure")

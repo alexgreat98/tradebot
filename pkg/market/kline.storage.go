@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/webdelo/tradebot/pkg/observer"
+	"github.com/webdelo/tradebot/pkg/strategy/pinbar"
 )
 
 type KlineStorage struct {
@@ -116,11 +117,13 @@ func (s *KlineStorage) HandleEvent(event string, data interface{}) error {
 			return errors.New("Can't convert interface{} to Kline!")
 		}
 		s.SetKline(kline)
+		analyzer := &pinbar.FigureAnalyzer{}
 
 		fmt.Println("--------------- Kline Storage ----------")
 		fmt.Println("s.GetCurrent()", s.GetCurrent())
 		fmt.Println("s.IsStorageReady()", s.IsStorageReady())
 		fmt.Println("s.CountLastList()", s.CountLastList())
+		fmt.Println("is Pinbar", analyzer.Check(s))
 	}
 	return nil
 }
